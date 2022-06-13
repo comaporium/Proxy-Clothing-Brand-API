@@ -1,0 +1,2034 @@
+--Kreiranje baze
+
+CREATE DATABASE OnlineShop
+USE OnlineShop
+
+
+--Kreiranje svih tabela
+
+
+CREATE TABLE VrsteArtikla(
+    IDVrsteArtikla int PRIMARY KEY IDENTITY (1,1) NOT NULL,
+    vrsta_artikla char(20) UNIQUE NOT NULL
+);
+
+CREATE TABLE Boje(
+    IDBoje int PRIMARY KEY IDENTITY (1,1) NOT NULL,
+    naziv_boje CHAR(15) UNIQUE NOT NULL,
+    sifra CHAR(20) UNIQUE NOT NULL
+);
+
+CREATE TABLE Nabavljaci(
+    IDNabavljaca int PRIMARY KEY IDENTITY (1,1) NOT NULL,
+    naziv_nabavljaca CHAR(30) NOT NULL,
+    broj NVARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Velicine(
+    IDVelicine int PRIMARY KEY IDENTITY (1,1) NOT NULL,
+    Velicina NVARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE Artikli(
+    IDArtikla int PRIMARY KEY IDENTITY (1,1) NOT NULL,
+    IDVrsteArtikla int NOT NULL REFERENCES VrsteArtikla(IDVrsteArtikla),
+    IDNabavljaca int NOT NULL REFERENCES Nabavljaci(IDNabavljaca),
+    IDBoje int NOT NULL REFERENCES Boje(IDBoje),
+    spol VARCHAR(10) NOT NULL,
+    cijena VARCHAR(10) NOT NULL,
+    dodatne_informacije VARCHAR(100)
+);
+
+CREATE TABLE Slike(
+    IDSlike int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IDArtikla int NOT NULL REFERENCES Artikli(IDArtikla),
+    url_slike NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Stanje(
+    IDStanja int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IDArtikla int NOT NULL REFERENCES Artikli(IDArtikla),
+    IDVelicine int NOT NULL REFERENCES Velicine(IDVelicine),
+    Stanje int NOT NULL
+);
+
+CREATE TABLE Korisnik(
+IDKorisnika int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+ime NVARCHAR(200) NOT NULL,
+prezime NVARCHAR(200) NOT NULL,
+adresa_stanovanja NVARCHAR(250) NOT NULL,
+datum_rodjenja DATE NOT NULL,
+kontakt_telefon NVARCHAR(100) NOT NULL,
+);
+
+CREATE TABLE Narudzba(
+    IDNarudzbe int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IDKorisnika int NOT NULL REFERENCES Korisnik(IDKorisnika),
+    cijena VARCHAR(10) NOT NULL,
+    vrijeme DATETIME NOT NULL DEFAULT (getdate())
+)
+
+CREATE TABLE Korpa(
+    IDKorpe int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IDNarudzbe int NOT NULL REFERENCES Narudzba(IDNarudzbe),
+    IDArtikla int NOT NULL REFERENCES Artikli(IDArtikla),
+    komada int NOT NULL,
+    cijena VARCHAR(10) NOT NULL,
+)
+
+
+-- POPUNJAVANJE TABELA REDOM
+
+INSERT INTO Velicine(Velicina)
+VALUES('S');
+
+INSERT INTO Velicine(Velicina)
+VALUES('M');
+
+INSERT INTO Velicine(Velicina)
+VALUES('L');
+
+INSERT INTO Velicine(Velicina)
+VALUES('XL');
+
+INSERT INTO Velicine(Velicina)
+VALUES('38');
+
+INSERT INTO Velicine(Velicina)
+VALUES('39');
+
+INSERT INTO Velicine(Velicina)
+VALUES('40');
+
+INSERT INTO Velicine(Velicina)
+VALUES('41');
+
+INSERT INTO Velicine(Velicina)
+VALUES('42');
+
+INSERT INTO Velicine(Velicina)
+VALUES('43');
+
+INSERT INTO Velicine(Velicina)
+VALUES('44');
+
+INSERT INTO Velicine(Velicina)
+VALUES('One size');
+
+SELECT * FROM Velicine ORDER BY IDVelicine
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('crna', '000000');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('bijela', 'FFFFFF');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('crvena', 'FF0000');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('narandzasta', 'FF9A00');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('zuta', 'FFFF00');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('zelena', '00FF00');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('tirkizna', '00FFDE');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('plava', '0044FF');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('ljubicasta', '9100FF');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('roza', 'FF00EF');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('siva', '9B9B9B');
+
+INSERT INTO Boje(naziv_boje, sifra)
+VALUES('smedja', '6E2C00');
+
+SELECT * FROM Boje ORDER BY IDBoje
+
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Nike', '061827389');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Adidas', '060178236987');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Puma', '062489794');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Reebok', '063564982');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Jordan', '061787543');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('New Balance', '061549979');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Converse', '06098765436');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Fila', '061654987');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Vans', '062541185');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('New Era', '063857321');
+INSERT INTO Nabavljaci(naziv_nabavljaca, broj)
+VALUES('Napapijri', '061424898');
+
+SELECT * FROM Nabavljaci ORDER BY IDNabavljaca
+SELECT * FROM VrsteArtikla
+
+INSERT INTO Velicine(Velicina, parent)
+VALUES('S');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Cap/Hat', 'Accesories');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Bag', 'Accesories');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Backpack', 'Accesories');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Socks', 'Accesories');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Cleaner', 'Accesories');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('T-shirt', 'Top');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Long sleeve shirt', 'Top');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Sweatshirt', 'Top');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Vest', 'Top');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Jacket', 'Top');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Dress', 'Top');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Jersey', 'Top');
+
+Select * from VrsteArtikla ORDER BY IDVrsteArtikla
+DELETE from VrsteArtikla WHERE IDVrsteArtikla = 23
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Skirt', 'Bot');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Tights', 'Bot');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Shorts', 'Bot');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Tracksuit', 'Bot');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Sneakers', 'Sneakers');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Boots', 'Sneakers');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Slippers', 'Sneakers');
+
+INSERT INTO VrsteArtikla(vrsta_artikla, parent)
+VALUES('Flip Flops', 'Sneakers');
+SELECT * FROM Slike
+
+SELECT * FROM Artikli 
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 1, 2, 'M', '285', 'From high-top to low-top. Live the legend of the Air Force 1, modernized for ultimate street style.', 'Nike Air Force 1 Cream')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (1, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DA0/DA0418-100/images/thumbs_900/DA0418-100_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (1, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DA0/DA0418-100/images/thumbs_900/DA0418-100_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (1, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DA0/DA0418-100/images/thumbs_900/DA0418-100_3_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (1, 5, 15)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (1, 6, 15)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (1, 7, 15)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (1, 8, 15)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (1, 9, 15)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (1, 10, 15)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 1, 1, 'M', '325', 'The Nike Air VaporMax Plus looks to the past and propels you into the future.', 'Nike Air Vaportmax plus')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (6, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CK0/CK0900-001/images/thumbs_900/CK0900-001_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (6, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CK0/CK0900-001/images/thumbs_900/CK0900-001_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (6, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CK0/CK0900-001/images/thumbs_900/CK0900-001_3_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (6, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (6, 6, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (6, 7, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (6, 8, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (6, 9, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (6, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 1, 7, 'M', '310', 'Rock a sneaker classic that has stood the test of time with a pair of Air Max 97 shoes from Nike.', 'Nike Air Max 97 SE NN')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (7, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM8/DM8588-100/images/thumbs_900/DM8588-100_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (7, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM8/DM8588-100/images/thumbs_900/DM8588-100_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (7, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM8/DM8588-100/images/thumbs_900/DM8588-100_2_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (7, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (7, 6, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (7, 7, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (7, 8, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (7, 9, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (7, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (12, 10, 1, 'M', '60', 'Fitted Cap features an embroidered Lakers logo at the front panels with a team wordmark', 'New Era 9ORTY LOSLAK BLK')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES( 8, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/602/60222493/images/thumbs_900/60222493_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (8, 2, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (8, 3, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 1, 2, 'W', '280', 'If you are looking for a comfortable, reliable sneaker that looks fly, the Nike Air Max 90 is it.', 'Nike Air Max 90 SE')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (9, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DH5/DH5075-100/images/thumbs_900/DH5075-100_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (9, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DH5/DH5075-100/images/thumbs_900/DH5075-100_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (9, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DH5/DH5075-100/images/thumbs_900/DH5075-100_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (9, 5, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (9, 6, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (9, 7, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (9, 8, 10)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (12, 10, 7, 'M', '49', 'A stylish classic hat from NE. You easily adjust the size and fit with the D-ring buckle.', 'New Era LEAG ESNL 940 NEYYAN')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES( 19, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/806/80636010/images/thumbs_900/80636010_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (19, 1, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (19, 2, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (19, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 2, 1, 'W', '170', 'Inspired by the archives, the bold trainers have a chunky build that is all about being noticed.', 'Adidas Ozelia')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (16, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GW0/GW0593/images/thumbs_900/GW0593_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (16, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GW0/GW0593/images/thumbs_900/GW0593_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (16, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GW0/GW0593/images/thumbs_900/GW0593_3_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (16, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (16, 6, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (16, 7, 9)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (16, 8, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 2, 1, 'M', '275', 'The NMD R1 is an adidas classic that is never gone out of style.', 'Adidas NMD-R1')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (20, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GZ7/GZ7922/images/thumbs_900/GZ7922_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (20, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GZ7/GZ7922/images/thumbs_900/GZ7922_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (20, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GZ7/GZ7922/images/thumbs_900/GZ7922_1_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (20, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (20, 6, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (20, 7, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (20, 8, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (20, 9, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (20, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 2, 6, 'W', '190', 'For 50 years, the adidas Stan Smith Shoes have been a staple on the courts and on the streets.', 'Adidas Stan Smith')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (21, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GX8/GX8553/images/thumbs_900/GX8553_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (21, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GX8/GX8553/images/thumbs_900/GX8553_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (21, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GX8/GX8553/images/thumbs_900/GX8553_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (21, 5, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (21, 6, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (21, 7, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (21, 8, 9)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 2, 10, 'M', '215', 'The Superstar is a athletic shoe manufactured by German multinational company Adidas since 1969.', 'Adidas Superstar')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (23, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GW5/GW5920/images/thumbs_900/GW5920_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (23, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GW5/GW5920/images/thumbs_900/GW5920_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (23, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GW5/GW5920/images/thumbs_900/GW5920_5_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (23, 5, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (23, 6, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (23, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (23, 8, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (23, 9, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (23, 10, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 2, 1, 'M', '235', 'A silhouette that celebrates modern streetball style, they make a statement with reflective details.', 'Adidas Niteball')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (25, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GY8/GY8566/images/thumbs_900/GY8566_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (25, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GY8/GY8566/images/thumbs_900/GY8566_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (25, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GY8/GY8566/images/thumbs_900/GY8566_1_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (25, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (25, 6, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (25, 7, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (25, 8, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (25, 9, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (25, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 3, 6, 'U', '235', 'The Mirage debuted in 1976 as a new track and field shoe that was lightweight and made for speed.', 'Puma Mirage Mox Mono')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (26, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375165-04/images/thumbs_900/375165-04_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (26, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375165-04/images/thumbs_900/375165-04_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (26, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375165-04/images/thumbs_900/375165-04_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (26, 5, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (26, 6, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (26, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (26, 8, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (26, 9, 6)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 3, 11, 'U', '235', 'A step above the rest with fun colorblocking, a dynamic material mix, and a stacked outsole.', 'Puma Cruise Rider')
+
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (29, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375072-01/images/thumbs_900/375072-01_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (29, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375072-01/images/thumbs_900/375072-01_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (29, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375072-01/images/thumbs_900/375072-01_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (29, 5, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (29, 6, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (29, 7, 12)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (29, 8, 13)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (29, 9, 7)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (12, 10, 3, 'M', '49', 'A stylish classic hat from NE. You easily adjust the size and fit with the D-ring buckle.', 'New Era LEAG ESNL 940 NEYYAN')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(30, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/806/80636012/images/thumbs_900/80636012_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (30, 1, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (30, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (30, 3, 6)
+
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 3, 2, 'W', '180', 'Dare to be bold. We have rebooted the RS design to take it to a whole new level.', 'Puma RS-X Twill Airmesh')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (31, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/368/368845-03/images/thumbs_900/368845-03_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (31, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/368/368845-03/images/thumbs_900/368845-03_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (31, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/368/368845-03/images/thumbs_900/368845-03_1_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (31, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (31, 6, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (31, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (31, 8, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (31, 9, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 3, 9, 'M', '160', 'Inspired by illusions and the space between what is real and otherworldly, ready for new realities.', 'Puma Mirage Mox BP')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (33, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375168-01/images/thumbs_900/375168-01_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (33, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375168-01/images/thumbs_900/375168-01_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (33, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/375/375168-01/images/thumbs_900/375168-01_1_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (33, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (33, 6, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (33, 7, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (33, 8, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (33, 9, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (33, 10, 7)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (12, 10, 5, 'U', '60', 'Featuring the Yankees logo, a visor and a snap closure that allows for adjustable sizing.', 'New Era TONAL MESH TRUCKER NEYYAN RGD')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (35, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/602/60222457/images/thumbs_900/60222457_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (35, 3, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (12, 1, 7, 'U', '55', 'A stylish bucket hat that feels timeless and can very easily become a new wardrobe staple!', 'Nike sportswear bucket hat')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (37, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CK5/CK5324-332/images/thumbs_900/CK5324-332_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (37, 2, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (37, 3, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (12, 10, 11, 'W', '60', 'A stylish classic hat from the popular brand New Era. Embroidered logo.', 'New Era FASHION ESS 940 NEY OSFA')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(38, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/111/11157578/images/thumbs_900/11157578_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (38, 1, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (38, 2, 7)
+
+
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (12, 5, 3, 'U', '45', 'Classic design with the famous Jumpman', 'Jordan Pro Jumpman Snapback')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(39, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/AR2/AR2118-687/images/thumbs_900/AR2118-687_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (39, 2, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (13, 2, 1, 'U', '39', 'Be organized in a fresh adidas style.', 'Adicolor WAISTB')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (41, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H35/H35587/images/thumbs_900/H35587_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (41, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (41, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 5, 3, 'M', '280', 'Air Jordan is a line of basketball shoes, athletic and style clothing.', 'Nike Air Jordan 1')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (43, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/554/554724-660/images/thumbs_900/554724-660_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (43, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/554/554724-660/images/thumbs_900/554724-660_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (43, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/554/554724-660/images/thumbs_900/554724-660_5_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (43, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/554/554724-660/images/thumbs_900/554724-660_6_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (43, 5, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (43, 6, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (43, 7, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (43, 8, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (43, 9, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (43, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 5, 3, 'M', '280', 'Shatter the sneaker status quo in the Jordan MA2.', 'Nike Jordan MA2')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (44, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CV8/CV8122-106/images/thumbs_900/CV8122-106_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (44, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CV8/CV8122-106/images/thumbs_900/CV8122-106_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (44, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CV8/CV8122-106/images/thumbs_900/CV8122-106_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (44, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CV8/CV8122-106/images/thumbs_900/CV8122-106_3_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (44, 5, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (44, 6, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (44, 7, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (44, 8, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (44, 9, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (44, 10, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 5, 1, 'M', '220', 'The outsole of the Jordan One Take 3 lets you easily change direction or stop on a dime.', 'Nike Jordan One Take 3')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (45, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DC7/DC7701-073/images/thumbs_900/DC7701-073_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (45, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DC7/DC7701-073/images/thumbs_900/DC7701-073_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (45, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DC7/DC7701-073/images/thumbs_900/DC7701-073_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (45, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DC7/DC7701-073/images/thumbs_900/DC7701-073_5_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (45, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (45, 6, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (45, 7, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (45, 8, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (45, 9, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (45, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 4, 2, 'W', '195', 'The new Classic Leather Legacy AZ blends two iconic silhouettes, taking inspiration from Aztec II.', 'Reebok Classic Legacy AZ')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (47, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GZ3/GZ3634/images/thumbs_900/GZ3634_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (47, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GZ3/GZ3634/images/thumbs_900/GZ3634_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (47, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GZ3/GZ3634/images/thumbs_900/GZ3634_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (47, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (47, 6, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (47, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (47, 8, 7)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 4, 1, 'W', '165', 'Smells like summer. Vibrant colours pair perfectly with cool breezes and beach trips.', 'Reebok Legacy 83')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (48, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FY5/FY5015/images/thumbs_900/FY5015_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (48, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FY5/FY5015/images/thumbs_900/FY5015_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (48, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FY5/FY5015/images/thumbs_900/FY5015_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (48, 5, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (48, 6, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (48, 7, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (48, 8, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 4, 2, 'U', '145', 'A modern design with a nostalgic feel.', 'Reebok Legacy')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (49, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/223/2232/images/thumbs_900/2232_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (49, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/223/2232/images/thumbs_900/2232_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (49, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/223/2232/images/thumbs_900/2232_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (49, 5, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (49, 6, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (49, 7, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (49, 8, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (49, 9, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (49, 10, 8)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 4, 9, 'M', '155', 'Inspired by old-school shoes popular in the 70s and 80s, Classic Leather Legacy is retro reimagined.', 'Reebok Classic Leather Legacy')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (51, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FZ2/FZ2905/images/thumbs_900/FZ2905_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (51, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FZ2/FZ2905/images/thumbs_900/FZ2905_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (51, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FZ2/FZ2905/images/thumbs_900/FZ2905_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 5, 9)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 6, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 8, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 9, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 4, 9, 'M', '155', 'Inspired by old-school shoes popular in the 70s and 80s, Classic Leather Legacy is retro reimagined.', 'Reebok Classic Leather Legacy')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (51, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FZ2/FZ2905/images/thumbs_900/FZ2905_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (51, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FZ2/FZ2905/images/thumbs_900/FZ2905_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (51, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/FZ2/FZ2905/images/thumbs_900/FZ2905_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 5, 9)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 6, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 8, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 9, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (51, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 6, 9, 'M', '210', 'We crafted our first New Balance 574 in 1988 and have not stopped since.', 'New Balance 574')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (52, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/ML5/ML574HI2/images/thumbs_900/ML574HI2_900_900px.JPG')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (52, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (52, 6, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (52, 7, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (52, 8, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (52, 9, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (52, 10, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 6, 9, 'M', '210', 'This modern take on retro inspired runners provides comfort and timeless style.', 'New Balance 327')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (52, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS3/MS327CPG/images/thumbs_900/MS327CPG_900_900px.JPG')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (52, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS3/MS327CPG/images/thumbs_900/MS327CPG_2_900_900px.JPG')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (52, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS3/MS327CPG/images/thumbs_900/MS327CPG_3_900_900px.JPG')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (53, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (53, 6, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (53, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (53, 8, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (53, 9, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (53, 10, 6)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 6, 3, 'M', '140', 'The 57/40 approaches the hybrid concept with extra years worth of design developments to explore.', 'New Balance 5740')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (55, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/M57/M5740HL1/images/thumbs_900/M5740HL1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (55, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/M57/M5740HL1/images/thumbs_900/M5740HL1_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (55, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/M57/M5740HL1/images/thumbs_900/M5740HL1_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (55, 5, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (55, 6, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (55, 7, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (55, 8, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (55, 9, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (55, 10, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 7, 2, 'U', '120', 'One of the most iconic sneakers in the world, recognized for its cultural authenticity.', 'Converse Chuck Taylor All Star')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (57, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/M76/M7652C/images/thumbs_900/M7652C_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (57, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/M76/M7652C/images/thumbs_900/M7652C_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (57, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/M76/M7652C/images/thumbs_900/M7652C_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (57, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (57, 6, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (57, 7, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (57, 8, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (57, 9, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (57, 10, 6)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 7, 9, 'U', '140', 'Re-crafted sneaker that uses modern details to celebrate the Chuck Taylor All Star from the 1970.', 'Converse Chuck 70')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (59, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/172/172676C/images/thumbs_900/172676C_2_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (59, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/172/172676C/images/thumbs_900/172676C_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (59, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/172/172676C/images/thumbs_900/172676C_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (59, 5, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (59, 6, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (59, 7, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (59, 8, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (59, 9, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (59, 10, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 9, 6, 'M', '90', 'Known worldwide for its comfortable silhouette, easy wearability, and beloved design.', 'Vans Classic Slip-on')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (60, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/VN0/VN0A4U38WTX/images/thumbs_900/VN0A4U38WTX_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (60, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/VN0/VN0A4U38WTX/images/thumbs_900/VN0A4U38WTX_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (60, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/VN0/VN0A4U38WTX/images/thumbs_900/VN0A4U38WTX_4_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (60, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (60, 6, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (60, 7, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (60, 8, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (60, 9, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (60, 10, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 9, 1, 'U', '110', 'Famous Vans Sidestripe has become the unmistakable and instantly recognizable mark of the Vans brand', 'Vans UA Old-Skool')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (62, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/VN0/VN000D3HY28/images/thumbs_900/VN000D3HY28_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (62, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/VN0/VN000D3HY28/images/thumbs_900/VN000D3HY28_4_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (62, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/VN0/VN000D3HY28/images/thumbs_900/VN000D3HY28_2_900_900px.jpg')
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (62, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (62, 6, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (62, 7, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (62, 8, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (62, 9, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (62, 10, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (13, 2, 13, 'W', '70', 'If you are fascinated by glittery things, this bag fills the magic for you.', 'Adidas Bag')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES (64, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GQ2/GQ2928/images/thumbs_900/GQ2928_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (64, 12, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (13, 11, 9, 'U', '80', 'A waistbag to pair with every urban outfit.', 'Napapijri Hering WB 3 Blue Marine')
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(65, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4GGP1761/images/thumbs_900/NP0A4GGP1761_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (65, 12, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (13, 1, 7, 'U', '45', 'The Nike Heritage bag lets you easily access and carry your gear.', 'Nike Heritage Bag')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(67, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ7/DJ7378-326/images/thumbs_900/DJ7378-326_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (67, 12, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (13, 3, 1, 'W', '28', 'Take your streetstyle into the future in the functional futuristic style of our Street Sling Pouch.', 'Puma Prime Street Sling Pouch')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(68, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/077/077394-01/images/thumbs_900/077394-01_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (68, 12, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (14, 2, 1, 'U', '40', 'A spacious backpack with a classic design.', 'Adidas Adicolor BACKPK')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(69, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H35/H35596/images/thumbs_900/H35596_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(69, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H35/H35596/images/thumbs_900/H35596_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(69, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H35/H35596/images/thumbs_900/H35596_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (69, 12, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (14, 2, 1, 'U', '75', 'Classic means authentic. In the case of this adidas backpack, classic also means iconic.', 'Adidas Adicolor Archive')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(71, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HD7/HD7219/images/thumbs_900/HD7219_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(71, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HD7/HD7219/images/thumbs_900/HD7219_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(71, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HD7/HD7219/images/thumbs_900/HD7219_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (71, 12, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (14, 2, 10, 'W', '40', 'Start the day with a touch of glamor.', 'Adidas BP MINI')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(73, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H09/H09042/images/thumbs_900/H09042_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(73, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H09/H09042/images/thumbs_900/H09042_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(73, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H09/H09042/images/thumbs_900/H09042_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (73, 12, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (14, 5, 12, 'U', '70', 'Durable fabric with a classic Jumpman logo on the front offers a sporty style.', 'Jordan Jan Air School Backpack')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(74, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/9B0/9B0503-GEH/images/thumbs_900/9B0503-GEH_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(74, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/9B0/9B0503-GEH/images/thumbs_900/9B0503-GEH_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (74, 12, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (14, 5, 11, 'W', '55', 'A small backpack designed for girls who want to complete their sporty look.', 'Jordan Jumpman Backpack small')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(75, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/2A0/2A0625-X24/images/thumbs_900/2A0625-X24_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(75, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/2A0/2A0625-X24/images/thumbs_900/2A0625-X24_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(75, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/2A0/2A0625-X24/images/thumbs_900/2A0625-X24_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (75, 12, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (14, 10, 9, 'U', '40', 'Durable fabric with a classic Jumpman logo on the front offers a sporty style.', 'Jordan Jan Air School Backpack')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(76, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/9B0/9B0503-GEH/images/thumbs_900/9B0503-GEH_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(76, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/9B0/9B0503-GEH/images/thumbs_900/9B0503-GEH_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (76, 12, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 1, 7, 'M', '65', 'Nike Sportswear is a men T-shirt for comfort from another planet.', 'Nike Fantasy Alien Air Sportswear T-Shirt')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(77, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM2/DM2217-343/images/thumbs_900/DM2217-343_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(77, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM2/DM2217-343/images/thumbs_900/DM2217-343_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (77, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (77, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (77, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 1, 10, 'M', '65', 'Nike Sportswear is a men T-shirt for comfort from another planet.', 'Nike Sportswear T-Shirt')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(78, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DN5/DN5169-507/images/thumbs_900/DN5169-507_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(78, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DN5/DN5169-507/images/thumbs_900/DN5169-507_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (78, 1, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (78, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (78, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (78, 4, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 1, 8, 'M', '65', 'Nike Sportswear is a men T-shirt for comfort from another planet.', 'Nike M NSW TEE BEACH JET SKI')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(79, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD1/DD1280-307/images/thumbs_900/DD1280-307_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(79, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD1/DD1280-307/images/thumbs_900/DD1280-307_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (79, 4, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 1, 13, 'M', '99', 'Comfortable, Stylish and Earth Friendly T-Shirt', 'Nike Sportwear Revivial')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(80, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM0/DM0085-004/images/thumbs_900/DM0085-004_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(80, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM0/DM0085-004/images/thumbs_900/DM0085-004_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (80, 2, 4)
+
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 1, 10, 'W', '52', 'Nike Sportswear Essentials women lifestyle t-shirt is characterized by comfort and style.', 'Nike Sportswear Essentials')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(81, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DQ5/DQ5379-530/images/thumbs_900/DQ5379-530_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(81, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DQ5/DQ5379-530/images/thumbs_900/DQ5379-530_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (81, 1, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (81, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (81, 3, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 1, 2, 'W', '45', 'Nike Sportswear Crop t-shirt will be suitable for any occasion and in any clothing combination.', 'Nike NSW CROP TEE PRNT')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(83, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ4/DJ4125-100/images/thumbs_900/DJ4125-100_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(83, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ4/DJ4125-100/images/thumbs_900/DJ4125-100_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (83, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (83, 3, 1)
+
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 2, 1, 'M', '65', 'Adidas ADVENTURE MOUNTAIN t-shirt brings back the vibe of the 80s and a sense of hiking adventure.', 'Adidas ADV MOUNT TEE')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(85, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GN2/GN2357/images/thumbs_900/GN2357_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(85, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GN2/GN2357/images/thumbs_900/GN2357_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (85, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (85, 3, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (85, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 2, 2, 'M', '65', 'Trends are coming back and this is confirmed by adidas, which takes you back to the ancient past.', 'Adidas 5 DINO TEE')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(90, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H13/H13478/images/thumbs_900/H13478_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(90, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H13/H13478/images/thumbs_900/H13478_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(90, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H13/H13478/images/thumbs_900/H13478_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (90, 1, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (90, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (90, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (90, 4, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 2, 9, 'M', '65', 'Enjoy the authentic style and uncompromising comfort of adidas ADICOLOR TREFOIL TEE t-shirts.', 'Adidas TREFOIL T-SHIRT')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(92, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H06/H06638/images/thumbs_900/H06638_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(92, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H06/H06638/images/thumbs_900/H06638_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(92, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H06/H06638/images/thumbs_900/H06638_2_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(92, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H06/H06638/images/thumbs_900/H06638_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (92, 2, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 2, 2, 'W', '75', 'The Always Original collection made sure to celebrate femininity and highlight diversity.', 'Adidas 5 DINO TEE')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(93, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HF2/HF2015/images/thumbs_900/HF2015_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(93, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HF2/HF2015/images/thumbs_900/HF2015_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(93, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HF2/HF2015/images/thumbs_900/HF2015_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (93, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (93, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (93, 3, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 2, 1, 'W', '53', 'A comfortable crop t-shirt that reflects the power of sport.', 'Adidas EQT TEE')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(94, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BP9/BP9223/images/thumbs_900/BP9223_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(94, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BP9/BP9223/images/thumbs_900/BP9223_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(94, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BP9/BP9223/images/thumbs_900/BP9223_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (94, 1, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (94, 2, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (94, 3, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 3, 6, 'M', '89', 'Hit the skatepark and stand out in this loose-fit tee from the first PUMA x BUTTER GOODS collection.', 'PUMA x BUTTER GOODS Graphic Tee')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(96, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/534/534058-85/images/thumbs_900/534058-85_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(96, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/534/534058-85/images/thumbs_900/534058-85_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(96, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/534/534058-85/images/thumbs_900/534058-85_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (96, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (96, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (96, 3, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (96, 4, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 3, 2, 'M', '80', 'Puma MINECRAFT men t-shirt is part of a collection whose design is inspired by the famous game.', 'Puma Minecraft')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(98, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/534/534375-02/images/thumbs_900/534375-02_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(98, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/534/534375-02/images/thumbs_900/534375-02_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(98, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/534/534375-02/images/thumbs_900/534375-02_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (98, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (98, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (98, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (98, 4, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 3, 2, 'W', '129', 'Snow Tiger Tee is accent to any outfit, with its all-over texture effect meant to emulate tiger.', 'Puma Snow Tiger')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(101, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/533/533475-02/images/thumbs_900/533475-02_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(101, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/533/533475-02/images/thumbs_900/533475-02_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(101, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/533/533475-02/images/thumbs_900/533475-02_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (101, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (101, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (101, 3, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 6, 1, 'M', '59', 'Take your sporty style to the streets with the NB Athletics Circular Stack Tee.', 'New Balance Athletic Circular Stack')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(102, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MT2/MT21503-BK/images/thumbs_900/MT21503-BK_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(102, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MT2/MT21503-BK/images/thumbs_900/MT21503-BK_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(102, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MT2/MT21503-BK/images/thumbs_900/MT21503-BK_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (102, 1, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (102, 2, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (102, 3, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (102, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 6, 2, 'M', '59', 'Take your sporty style to the streets with the NB Athletics Circular Stack Tee.', 'New Balance Athletic Circular Stack')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(103, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MT2/MT21503-WT/images/thumbs_900/MT21503-WT_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(103, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MT2/MT21503-WT/images/thumbs_900/MT21503-WT_2_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(103, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MT2/MT21503-WT/images/thumbs_900/MT21503-WT_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (103, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (103, 3, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (18, 6, 2, 'W', '35', 'NEW BALANCE t-shirt intended for everyone who loves a combination of simple and gentle colors.', 'New Balance Athlethics Higher Learning')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(106, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13504-SST/images/thumbs_900/WT13504-SST_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(106, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13504-SST/images/thumbs_900/WT13504-SST_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(106, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13504-SST/images/thumbs_900/WT13504-SST_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (106, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (106, 2, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (19, 1, 1, 'M', '35', 'Nike Skate Boarding is a skate shirt. This shirt has a relaxed cut perfect for every day and night.', 'Nike SB Snake Shirt')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(107, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM2/DM2257-010/images/thumbs_900/DM2257-010_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(107, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM2/DM2257-010/images/thumbs_900/DM2257-010_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(107, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13504-SST/images/thumbs_900/WT13504-SST_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (107, 4, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (19, 1, 7, 'M', '120', 'Nike Sportswear Sport Essentials+ lifestyle sweatshirt is made of durable warm semi-brushed fabric.', 'Nike Sportswear Sport Essentials+')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(109, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD7/DD7045-736/images/thumbs_900/DD7045-736_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(109, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD7/DD7045-736/images/thumbs_900/DD7045-736_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(109, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13504-SST/images/thumbs_900/WT13504-SST_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (109, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (109, 4, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (19, 2, 11, 'W', '69', 'Adidas long-sleeved T-shirt will provide you with the comfort you deserve after a long day.', 'Adidas Cropped Rib LS')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(111, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE6/HE6906/images/thumbs_900/HE6906_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(111, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE6/HE6906/images/thumbs_900/HE6906_2_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(111, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE6/HE6906/images/thumbs_900/HE6906_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (111, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (111, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (111, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (19, 1, 11, 'W', '129', 'The Nike Air women lifestyle long sleeve shirt lifts the look with its cropped cut.', 'Nike Nike Air Hoodie')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(112, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD5/DD5433-695/images/thumbs_900/DD5433-695_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(112, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD5/DD5433-695/images/thumbs_900/DD5433-695_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(112, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD5/DD5433-695/images/thumbs_900/DD5433-695_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (112, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (112, 2, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 2, 9, 'M', '111', 'Start your day in the adidas Funny Dino men lifestyle hooded sweatshirt and bring only good vibes.', 'Adidas 5 AS HOODY')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(113, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H13/H13445/images/thumbs_900/H13445_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(113, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H13/H13445/images/thumbs_900/H13445_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(113, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H13/H13445/images/thumbs_900/H13445_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (113, 1, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (113, 2, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 2, 3, 'M', '83', 'Adidas ESSENTIAL sweatshirt is a simple classic look that goes well with all clothing combinations.', 'Adidas Essential Hoody')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(115, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HG3/HG3900/images/thumbs_900/HG3900_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(115, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HG3/HG3900/images/thumbs_900/HG3900_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(115, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HG3/HG3900/images/thumbs_900/HG3900_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (115, 1, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (115, 2, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (115, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (115, 4, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 2, 7, 'M', '135', 'Adidas LIGHTNING is a men hooded sweatshirt. It is very comfortable and pleasant to wear.', 'Adidas SPRT Lightning Hoodie')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(116, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE4/HE4716/images/thumbs_900/HE4716_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(116, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE4/HE4716/images/thumbs_900/HE4716_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(116, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE4/HE4716/images/thumbs_900/HE4716_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (116, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (116, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (116, 3, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (116, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 11, 6, 'M', '150', 'NAPAPIJRI B-AYAS is a men hooded sweatshirt that will keep you warm before and after your workout.', 'Napapijri B-AYAS')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(118, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4GBCYB51/images/thumbs_900/NP0A4GBCYB51_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(118, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4GBCYB51/images/thumbs_900/NP0A4GBCYB51_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(118, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4GBCYB51/images/thumbs_900/NP0A4GBCYB51_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (118, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (118, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (118, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (118, 4, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 11, 1, 'M', '122', 'Napapijri have constructed an essentials collection that is both versatile and sustainable.', 'Napapijri BERBER C 2 BLACK 041')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(119, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4FQU0411/images/thumbs_900/NP0A4FQU0411_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(119, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4FQU0411/images/thumbs_900/NP0A4FQU0411_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(119, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4FQU0411/images/thumbs_900/NP0A4FQU0411_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (119, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (119, 3, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 11, 9, 'M', '136', 'Napapijri BURGEE is a men sweatshirt with a classic look that will keep you warm when needed.', 'Napapijri Burgee')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(120, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4FQKBE11/images/thumbs_900/NP0A4FQKBE11_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(120, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4FQKBE11/images/thumbs_900/NP0A4FQKBE11_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(120, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4FQKBE11/images/thumbs_900/NP0A4FQKBE11_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (120, 1, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (120, 2, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 1, 1, 'M', '129', 'Refresh your wardrobe and variety of clothing combinations with Nike Sportswear City sweatshirt.', 'Nike Sportswear City Made Hoodie')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(123, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD5/DD5925-010/images/thumbs_900/DD5925-010_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(123, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD5/DD5925-010/images/thumbs_900/DD5925-010_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(123, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DD5/DD5925-010/images/thumbs_900/DD5925-010_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (123, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (123, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (123, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (123, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 1, 9, 'M', '129', 'Nike Sportswear Club Fleece Pullover Hoodie combines classic style with the soft comfort of fleece.', 'Nike Sportswear Club Fleece')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(124, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BV2/BV2973-410/images/thumbs_900/BV2973-410_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(124, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BV2/BV2973-410/images/thumbs_900/BV2973-410_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(124, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BV2/BV2973-410/images/thumbs_900/BV2973-410_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (124, 4, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 1, 1, 'M', '139', 'Nike Sportswear Club Fleece is sweatshirt that brings bold street style while providing comfort.', 'Nike Sportswear Club')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(125, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BV2/BV2648-010/images/thumbs_900/BV2648-010_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(125, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BV2/BV2648-010/images/thumbs_900/BV2648-010_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(125, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/BV2/BV2648-010/images/thumbs_900/BV2648-010_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (125, 2, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (125, 3, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 5, 1, 'M', '104', 'Nike Jordan Essential Mountainside is designed for all fans of basketball and modern style.', 'Jordan Essential Mountainside')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(127, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DC9/DC9727-010/images/thumbs_900/DC9727-010_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(127, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DC9/DC9727-010/images/thumbs_900/DC9727-010_2_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(127, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DC9/DC9727-010/images/thumbs_900/DC9727-010_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (127, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (127, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (127, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 3, 7, 'W', '117', 'This sweatshirt combines a classic sporty crew neck cut with a fabulous floral print.', 'Puma x Liberty Crew Neck Sweatshirt')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(133, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/532/532888-80/images/thumbs_900/532888-80_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(133, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/532/532888-80/images/thumbs_900/532888-80_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(133, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/532/532888-80/images/thumbs_900/532888-80_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (133, 1, 8)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 6, 1, 'W', '63', 'NEW BALANCE intended for everyone who loves a combination of simple cut and gentle colors.', 'New Balance Athlethics Higher Learning')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(134, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13501-BK/images/thumbs_900/WT13501-BK_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(134, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13501-BK/images/thumbs_900/WT13501-BK_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(134, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/WT1/WT13501-BK/images/thumbs_900/WT13501-BK_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (134, 1, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (134, 2, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 1, 5, 'W', '97', 'Nike Sportswear Essential Collection hoodie has a carefree and confident look.', 'Nike Sportswear Essential Collection')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(135, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ7/DJ7668-738/images/thumbs_900/DJ7668-738_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(135, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ7/DJ7668-738/images/thumbs_900/DJ7668-738_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(135, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ7/DJ7668-738/images/thumbs_900/DJ7668-738_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (135, 1, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (135, 2, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (135, 3, 8)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 1, 7, 'W', '97', 'Nike Sportswear Essential Collection hoodie has a carefree and confident look.', 'Nike Sportswear Essential Collection')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(136, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ7/DJ7668-397/images/thumbs_900/DJ7668-397_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(136, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ7/DJ7668-397/images/thumbs_900/DJ7668-397_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(136, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DJ7/DJ7668-397/images/thumbs_900/DJ7668-397_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (136, 1, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (136, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (136, 3, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (20, 2, 3, 'W', '111', 'Perfectly integrated combination of original adidas style with Bambi.', 'Adidas Bambi Hoodie')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(137, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE6/HE6876/images/thumbs_900/HE6876_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(137, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE6/HE6876/images/thumbs_900/HE6876_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(137, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE6/HE6876/images/thumbs_900/HE6876_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(137, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE6/HE6876/images/thumbs_900/HE6876_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (137, 1, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (137, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (137, 3, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (137, 4, 6)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (24, 2, 11, 'W', '75', 'Sporty style and narrow cut bring an attractive look.', 'Adicolor Essentials Rib Tank Dress')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(138, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HG6/HG6166/images/thumbs_900/HG6166_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(138, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HG6/HG6166/images/thumbs_900/HG6166_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (138, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (138, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (138, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (24, 2, 9, 'W', '69', 'In the adidas lifestyle dress, you will get all the style and confidence to beat the competition.', 'Adidas Racer B Dress')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(139, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H34/H34603/images/thumbs_900/H34603_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(139, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/H34/H34603/images/thumbs_900/H34603_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (139, 1, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (139, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (139, 3, 1)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (24, 2, 3, 'W', '89', 'Adidas  lifestyle dress that you can wear wherever you go.', 'Adicolor Classics Big Trefoil Tee Dress')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(140, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HC2/HC2051/images/thumbs_900/HC2051_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(140, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HC2/HC2051/images/thumbs_900/HC2051_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (140, 1, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (140, 2, 9)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (140, 3, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (24, 1, 11, 'W', '97', 'Nike Dress is sports dress with short sleeves and a raised collar that will complete any outfit.', 'Nike NSW AIR DRESS RIB')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(142, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ8/CZ8616-532/images/thumbs_900/CZ8616-532_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(142, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ8/CZ8616-532/images/thumbs_900/CZ8616-532_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (142, 1, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (24, 1, 7, 'W', '83', 'Relaxed, casual cut in the tones of nature, brings you a modern and unique style.', 'Nike NSW DRESS EARTH DAY FT')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(143, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9247-371/images/thumbs_900/CZ9247-371_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(143, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9247-371/images/thumbs_900/CZ9247-371_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (143, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (143, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (143, 3, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (24, 1, 1, 'W', '129', 'Nike SPORTSWEAR DRESS JRSY lifestyle dress gives you a sporty look and elegance at the same time.', 'Nike NSW DRESS JRSY')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(144, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9732-010/images/thumbs_900/CZ9732-010_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(144, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9732-010/images/thumbs_900/CZ9732-010_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (144, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (144, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (144, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (24, 1, 2, 'W', '77', 'Nike SPORTSWEAR DRESS JRSY lifestyle dress gives you a sporty look and elegance at the same time.', 'Nike NSW DRESS JRSY')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(145, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CJ3/CJ3750-100/images/thumbs_900/CJ3750-100_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(145, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CJ3/CJ3750-100/images/thumbs_900/CJ3750-100_1_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (145, 1, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (145, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (145, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 2, 1, 'M', '75', 'The classic adidas design with the famous three stripes and longer cut brings exceptional comfort.', 'Adidas 3-STRIPE SHORTS')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(146, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DH5/DH5798/images/thumbs_900/DH5798_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(146, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DH5/DH5798/images/thumbs_900/DH5798_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(146, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DH5/DH5798/images/thumbs_900/DH5798_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (146, 1, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (146, 3, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (146, 4, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 2, 5, 'M', '75', 'The classic adidas design with the famous three stripes and longer cut brings exceptional comfort.', 'Adidas 3-STRIPE SHORTS')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(147, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HF2/HF2107/images/thumbs_900/HF2107_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(147, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HF2/HF2107/images/thumbs_900/HF2107_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(147, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HF2/HF2107/images/thumbs_900/HF2107_2_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(147, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HF2/HF2107/images/thumbs_900/HF2107_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (147, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (147, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 2, 9, 'M', '62', 'Intense color of this adidas shorts will ensure that you are noticed at every opportunity.', 'Adidas FRM SHORTS')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(150, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GN3/GN3878/images/thumbs_900/GN3878_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(150, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GN3/GN3878/images/thumbs_900/GN3878_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(150, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GN3/GN3878/images/thumbs_900/GN3878_2_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(150, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GN3/GN3878/images/thumbs_900/GN3878_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (150, 1, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (150, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (150, 3, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (150, 4, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 2, 7, 'M', '99', 'Adidas LIGHTNING men lifestyle shorts is your battery for survival during the day.', 'Adidas SPRT Lightning Shorts')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(151, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE7/HE7046/images/thumbs_900/HE7046_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(151, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE7/HE7046/images/thumbs_900/HE7046_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(151, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/HE7/HE7046/images/thumbs_900/HE7046_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (151, 1, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (151, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (151, 3, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (151, 4, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 3, 'M', '99', 'Nike Sportswear Alumni is a men shorts designed for everyday wear.', 'Nike M NSW HE SHORT FT ALUMNI')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(152, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/AR2/AR2375-659/images/thumbs_900/AR2375-659_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(152, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/AR2/AR2375-659/images/thumbs_900/AR2375-659_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(152, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/AR2/AR2375-659/images/thumbs_900/AR2375-659_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (152, 1, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (152, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (152, 3, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (152, 4, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 9, 'M', '119', 'Nike shorts is a men shorts designed to give you a simple sporty design and all-day comfort.', 'Nike M NSW NIKE AIR FT SHORTS')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(154, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM5/DM5211-407/images/thumbs_900/DM5211-407_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(154, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM5/DM5211-407/images/thumbs_900/DM5211-407_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(154, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM5/DM5211-407/images/thumbs_900/DM5211-407_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (154, 1, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (154, 2, 8)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (154, 3, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (154, 4, 5)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 7, 'M', '83', 'Nike shorts is a men shorts designed to give you a simple sporty design and all-day comfort.', 'Nike NSW NIKE AIR FT FLC SHORTS')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(155, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DA0/DA0188-222/images/thumbs_900/DA0188-222_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(155, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DA0/DA0188-222/images/thumbs_900/DA0188-222_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(155, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DA0/DA0188-222/images/thumbs_900/DA0188-222_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (155, 1, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (155, 2, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (155, 3, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (155, 4, 4)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 6, 'M', '89', 'Grab everything your day offers in New Balance Athletic Wind men lifestyle shorts.', 'New Balance Athletic Wind')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(156, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS2/MS21500-BK/images/thumbs_900/MS21500-BK_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(156, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS2/MS21500-BK/images/thumbs_900/MS21500-BK_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(156, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS2/MS21500-BK/images/thumbs_900/MS21500-BK_3_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (156, 1, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (156, 2, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (156, 3, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (156, 4, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 9, 'M', '79', 'The fresh, sporty style of the New Balance Mesh shorts gives a modern twist to the classic style.', 'New Balance Mesh')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(158, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS2/MS21503-VSK/images/thumbs_900/MS21503-VSK_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(158, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS2/MS21503-VSK/images/thumbs_900/MS21503-VSK_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(158, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/MS2/MS21503-VSK/images/thumbs_900/MS21503-VSK_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (158, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (158, 2, 1)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (158, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 11, 1, 'W', '79', 'NAPAPIJRI N-Box leggings will serve you well during various sport activities.', 'Napapijri N-BOX LEGGINGS 2 BLACK 041')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(159, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4GD30411/images/thumbs_900/NP0A4GD30411_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(159, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4GD30411/images/thumbs_900/NP0A4GD30411_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(159, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/NP0/NP0A4GD30411/images/thumbs_900/NP0A4GD30411_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (159, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (159, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (159, 3, 2)
+
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 1, 'W', '95', 'Nike Air is a women training shorts that will support you with its design.', 'Nike Air Shorts')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(160, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM6/DM6468-010/images/thumbs_900/DM6468-010_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(160, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM6/DM6468-010/images/thumbs_900/DM6468-010_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(160, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM6/DM6468-010/images/thumbs_900/DM6468-010_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (160, 1, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (160, 2, 2)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (160, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 7, 'W', '76', 'Nike SPORTSWEAR women training shorts are ideal for training in the gym or walking through the city.', 'Nike NSW SHORT EARTH DAY FT MR')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(161, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9249-371/images/thumbs_900/CZ9249-371_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(161, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9249-371/images/thumbs_900/CZ9249-371_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(161, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9249-371/images/thumbs_900/CZ9249-371_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (161, 1, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (161, 2, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (161, 3, 2)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (29, 1, 11, 'W', '76', 'Nike SPORTSWEAR women training shorts are ideal for training in the gym or walking through the city.', 'Nike NSW SHORT EARTH DAY FT MR')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(47, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/GZ3/GZ3634/images/thumbs_900/GZ3634_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(162, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9249-805/images/thumbs_900/CZ9249-805_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(162, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/CZ9/CZ9249-805/images/thumbs_900/CZ9249-805_2_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (162, 1, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (162, 2, 3)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (162, 3, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (162, 4, 5)
+
+SELECT * FROM Artikli ORDER BY IDArtikla DESC
+
+INSERT INTO Korisnik(ime, prezime, adresa_stanovanja, datum_rodjenja, kontakt_telefon, username)
+VALUES ('Rijad', 'Čomor', 'Novopazarska 382', '07-10-1999', '061950493', 'rcomor')
+
+INSERT INTO Korisnik(ime, prezime, adresa_stanovanja, datum_rodjenja, kontakt_telefon, username)
+VALUES ('Ivan', 'Krakan', 'Zmaja od Cvile 8', '12-11-1999', '061950493', 'ikrakan')
+
+INSERT INTO Narudzba(IDKorisnika, cijena)
+VALUES(1, '363')
+
+INSERT INTO Korpa(IDNarudzbe, IDArtikla, komada, cijena)
+VALUES(1, 143, 1, '83')
+
+SELECT * FROM Korpa
+
+CREATE VIEW [vwSlikeArtikala] AS
+SELECT Artikli.IDArtikla, Artikli.Naziv, Slike.url_slike
+FROM Artikli 
+INNER JOIN Slike ON Slike.IDArtikla=Artikli.IDArtikla
+
+CREATE VIEW [vwStanjeArtikala] AS
+SELECT Artikli.IDArtikla, Artikli.Naziv ,Velicine.Velicina, Stanje.Stanje
+FROM Artikli 
+INNER JOIN Stanje ON Stanje.IDArtikla=Artikli.IDArtikla
+INNER JOIN Velicine ON Velicine.IDVelicine = Stanje.IDVelicine
+
+CREATE VIEW [vwHistorijaNarudzbi] AS
+SELECT Narudzba.IDNarudzbe, Korisnik.IDKorisnika, Korisnik.username, Korpa.IDArtikla, Artikli.Naziv, Korpa.komada, Artikli.cijena, Narudzba.vrijeme
+FROM Narudzba
+INNER JOIN Korisnik ON Korisnik.IDKorisnika = Narudzba.IDKorisnika
+INNER JOIN Korpa ON Korpa.IDNarudzbe = Narudzba.IDNarudzbe
+INNER JOIN Artikli ON Artikli.IDArtikla = Korpa.IDArtikla
+
+CREATE VIEW [vwSveOArtiklima] AS
+SELECT Artikli.IDArtikla, Artikli.Naziv, Nabavljaci.naziv_nabavljaca, Artikli.spol, Artikli.cijena, Artikli.dodatne_informacije, VrsteArtikla.vrsta_artikla, VrsteArtikla.parent, Slike.url_slike
+FROM Artikli
+INNER JOIN Nabavljaci ON Nabavljaci.IDNabavljaca = Artikli.IDNabavljaca
+INNER JOIN VrsteArtikla ON VrsteArtikla.IDVrsteArtikla = Artikli.IDVrsteArtikla
+INNER JOIN Slike ON Slike.IDSlike = Artikli.glavnaSlika
+
+DROP VIEW [vwHistorijaNarudzbi]
+
+SELECT * FROM Slike ORDER BY IDSlike DESC
+
+SELECT * FROM [SlikeArtikala];
+SELECT * FROM [vwZadnjiPetArtikli];
+
+ALTER TABLE Korpa
+ALTER COLUMN broj varchar(50);
+
+DELETE FROM Slike WHERE IDArtikla = 76
+DELETE FROM Stanje WHERE IDArtikla = 76
+DELETE FROM Artikli WHERE IDArtikla = 76
+SELECT * FROM Artikli WHERE naziv='New Balance Athlethics Higher Learning'
+SELECT * FROM Artikli WHERE glavnaSlika IS NULL
+SELECT * FROM Stanje WHERE IDArtikla = 60 
+
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(163, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/AH8/AH8050-005/images/thumbs_900/AH8050-005_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(163, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/AH8/AH8050-005/images/thumbs_900/AH8050-005_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(163, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/AH8/AH8050-005/images/thumbs_900/AH8050-005_4_900_900px.jpg')
+
+SELECT * FROM VrsteArtikla
+
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (163, 6, 3)
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 1, 1, 'U', '280', 'The Shoe is Inspired by the Air Max 93 and the Air Max 180', 'Nike Air Max 270')
+
+UPDATE Artikli
+SET spol = 'M'
+WHERE IDArtikla = 1;
+
+UPDATE Artikli
+SET glavnaSlika = 304
+WHERE IDArtikla = 47;
+
+UPDATE Artikli
+SET glavnaSlika = 289
+WHERE IDArtikla = 161;
+
+UPDATE Artikli
+SET glavnaSlika = 292
+WHERE IDArtikla = 162;
+
+UPDATE Artikli
+SET cijena = 265
+WHERE IDArtikla = 44
+
+CREATE VIEW [vwZadnjiPetAccesories] AS
+SELECT TOP 5 Artikli.IDArtikla, Artikli.Naziv, Nabavljaci.naziv_nabavljaca, Artikli.spol, Artikli.cijena, Artikli.dodatne_informacije, VrsteArtikla.vrsta_artikla, VrsteArtikla.parent, Slike.url_slike
+FROM Artikli
+INNER JOIN Nabavljaci ON Nabavljaci.IDNabavljaca = Artikli.IDNabavljaca
+INNER JOIN VrsteArtikla ON VrsteArtikla.IDVrsteArtikla = Artikli.IDVrsteArtikla
+INNER JOIN Slike ON Slike.IDSlike = Artikli.glavnaSlika
+WHERE VrsteArtikla.parent = 'Accesories'
+ORDER BY Artikli.vrijeme_dodavanja DESC
+
+CREATE VIEW [vwZadnjiPetBot] AS
+SELECT TOP 5 Artikli.IDArtikla, Artikli.Naziv, Nabavljaci.naziv_nabavljaca, Artikli.spol, Artikli.cijena, Artikli.dodatne_informacije, VrsteArtikla.vrsta_artikla, VrsteArtikla.parent, Slike.url_slike
+FROM Artikli
+INNER JOIN Nabavljaci ON Nabavljaci.IDNabavljaca = Artikli.IDNabavljaca
+INNER JOIN VrsteArtikla ON VrsteArtikla.IDVrsteArtikla = Artikli.IDVrsteArtikla
+INNER JOIN Slike ON Slike.IDSlike = Artikli.glavnaSlika
+WHERE VrsteArtikla.parent = 'Bot'
+ORDER BY Artikli.vrijeme_dodavanja DESC
+
+CREATE VIEW [vwZadnjiPetSneakers] AS
+SELECT TOP 5 Artikli.IDArtikla, Artikli.Naziv, Nabavljaci.naziv_nabavljaca, Artikli.spol, Artikli.cijena, Artikli.dodatne_informacije, VrsteArtikla.vrsta_artikla, VrsteArtikla.parent, Slike.url_slike
+FROM Artikli
+INNER JOIN Nabavljaci ON Nabavljaci.IDNabavljaca = Artikli.IDNabavljaca
+INNER JOIN VrsteArtikla ON VrsteArtikla.IDVrsteArtikla = Artikli.IDVrsteArtikla
+INNER JOIN Slike ON Slike.IDSlike = Artikli.glavnaSlika
+WHERE VrsteArtikla.parent = 'Sneakers'
+ORDER BY Artikli.vrijeme_dodavanja DESC
+
+SELECT Artikli.Naziv, Artikli.spol, Boje.naziv_boje, VrsteArtikla.vrsta_artikla, VrsteArtikla.parent FROM Artikli
+INNER JOIN Boje ON Boje.IDBoje = Artikli.IDBoje
+INNER JOIN VrsteArtikla ON VrsteArtikla.IDVrsteArtikla = Artikli.IDVrsteArtikla
+ORDER BY parent 
+CREATE VIEW [vwZadnjiKorisnik] AS
+SELECT TOP 1 * FROM Korisnik ORDER BY IDKorisnika DESC
+SELECT TOP 1 * FROM Stanje Where IDArtikla = 163
+
+CREATE VIEW [vwZadnjaNarudzba] AS
+SELECT * FROM Narudzba ORDER BY IDNarudzbe DESC
+
+
+
+ALTER TABLE Narudzba
+ALTER COLUMN vrijeme int NOT UNIQUE
+
+UPDATE Korisnik
+SET username = NULL
+WHERE IDVelicine = 12
+
+INSERT INTO Artikli(IDVrsteArtikla, IDNabavljaca, IDBoje, spol, cijena, dodatne_informacije, naziv)
+VALUES (32, 1, 2, 'M', '265', 'Celebrating retro style, Air More Uptempo 96 basketball shoes bring this game back to the streets.', 'Nike Air More UPTEMPO 96')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(179, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM1/DM1297-100/images/thumbs_900/DM1297-100_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(179, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM1/DM1297-100/images/thumbs_900/DM1297-100_1_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(179, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM1/DM1297-100/images/thumbs_900/DM1297-100_3_900_900px.jpg')
+INSERT INTO Slike(IDArtikla, url_slike)
+VALUES(179, 'https://www.buzzsneakers.com/files/thumbs/files/images/slike-proizvoda/media/DM1/DM1297-100/images/thumbs_900/DM1297-100_4_900_900px.jpg')
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (179, 5, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (179, 6, 5)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (179, 7, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (179, 8, 6)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (179, 9, 7)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (179, 10, 4)
+INSERT INTO Stanje(IDArtikla, IDVelicine, Stanje)
+VALUES (179, 11, 8)
+
+
+UPDATE Artikli
+SET glavnaSlika = 330
+WHERE IDArtikla = 179;
+
+SELECT * FROM Artikli ORDER BY IDArtikla DESC
+SELECT * FROM Slike ORDER BY IDArtikla DESC 
+
+UPDATE Artikli
+SET glavnaSlika = 107
+WHERE IDArtikla = 64;
+
+DELETE FROM Artikli WHERE IDArtikla = 167 
+
+
+
+SELECT IDArtikla, cijena, ime, prezime, email, adresa, broj FROM Korpa ORDER BY IDKorpe DESC
